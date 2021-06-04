@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>搭建Mac的TimeMachine备份服务器 | Jacob&#39; Wiki</title>
+    
+    
+        <meta name="keywords" content="Mac" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="简介    MAC系统的Time Machine（时间机器）功能十分好用，顾名思义，它可以让你在系统崩溃了之后，还有后悔药吃，通过Time Machine瞬间回到之前的状态。Time Machine支持以下几种存储设备      连接到 Mac 的外置驱动器，例如 USB、雷雳或 FireWire 驱动器     连接到 AirPort Extreme 基站（802.11ac 机型）或 AirPo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建Mac的TimeMachine备份服务器">
+<meta property="og:url" content="https://blog.1seo.top/wiki/Mac/%E6%90%AD%E5%BB%BAMac%E7%9A%84TimeMachine%E5%A4%87%E4%BB%BD%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="Jacob&#39; Wiki">
+<meta property="og:description" content="简介    MAC系统的Time Machine（时间机器）功能十分好用，顾名思义，它可以让你在系统崩溃了之后，还有后悔药吃，通过Time Machine瞬间回到之前的状态。Time Machine支持以下几种存储设备      连接到 Mac 的外置驱动器，例如 USB、雷雳或 FireWire 驱动器     连接到 AirPort Extreme 基站（802.11ac 机型）或 AirPo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.1seo.top/images/16020651816496.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16020655035112.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16020718144051.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16020661138086.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16020663746970.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16020663900614.jpg">
+<meta property="article:published_time" content="2020-10-07T09:07:51.000Z">
+<meta property="article:modified_time" content="2020-10-07T11:59:28.000Z">
+<meta property="article:author" content="Jacob&#39; Doc">
+<meta property="article:tag" content="Mac">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.1seo.top/images/16020651816496.jpg">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Jacob&#39; Wiki" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/images/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<script src="/js/hexo_resize_image.js"></script>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Jacob&#39; Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id='categories'>
+        <h3 class="widget-title">
+            <span>分类</span>
+            &nbsp;
+            <a id='allExpand' href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree" > 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Docker/docker%E7%AE%80%E4%BB%8B/">Docker简介</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Kubernetes/index/">Kubernetes中ingress配置ssl证书</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Linux/Linux-cmd/">Linux查看硬件信息</a></li>  <li class="file"><a href="/wiki/Linux/oradcl/">oradcl 创建实例技术分享</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Mac
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Mac/rbenv%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E7%AE%A1%E7%90%86/">使用 rbenv 安装和管理 Ruby 版本</a></li>  <li class="file active"><a href="/wiki/Mac/%E6%90%AD%E5%BB%BAMac%E7%9A%84TimeMachine%E5%A4%87%E4%BB%BD%E6%9C%8D%E5%8A%A1%E5%99%A8/">搭建Mac的TimeMachine备份服务器</a></li>  <li class="file"><a href="/wiki/Mac/maciTerm2/">Mac终端之 iTerm2 美化</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Python/%E5%B0%86AmazonSNS%E9%80%9A%E7%9F%A5%E8%BD%AC%E5%8F%91%E5%88%B0Telegram/">将AmazonSNS通知转发到Telegram</a></li>  <li class="file"><a href="/wiki/Python/Python%E5%80%92%E8%AE%A1%E6%97%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E5%BA%94%E7%94%A8/">Python倒计时显示的应用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/hello-world/">Hello World</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Mac/搭建Mac的TimeMachine备份服务器" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Mac/">Mac</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Mac/" rel="tag">Mac</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/Mac/%E6%90%AD%E5%BB%BAMac%E7%9A%84TimeMachine%E5%A4%87%E4%BB%BD%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+            <time datetime="2020-10-07T09:07:51.000Z" itemprop="datePublished">2020-10-07</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span> 
+                            <!-- <span class="right" class="post-count">阅读时长≈4分</span>
+                            <span class="right" class="post-count">字数统计: 10k个 ｜ </span>  -->
+                        
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            搭建Mac的TimeMachine备份服务器
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">文章目录</strong>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Netatalk"><span class="toc-number">2.</span> <span class="toc-text">安装 Netatalk</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-Netatalk"><span class="toc-number">2.1.</span> <span class="toc-text">配置 Netatalk</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Avahi-%E7%94%A8%E4%BA%8E%E7%BD%91%E7%BB%9C%E5%8F%91%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">安装 Avahi 用于网络发现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="toc-number">4.</span> <span class="toc-text">设置开机自启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">Mac端配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D%E6%96%87%E4%BB%B6%E6%88%96%E6%81%A2%E5%A4%8D%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.</span> <span class="toc-text">恢复文件或恢复系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D%E6%96%87%E4%BB%B6"><span class="toc-number">6.1.</span> <span class="toc-text">恢复文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D%E7%B3%BB%E7%BB%9F"><span class="toc-number">7.</span> <span class="toc-text">恢复系统</span></a></li></ol>
+                </div>
+            
+        
+        
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>    MAC系统的Time Machine（时间机器）功能十分好用，顾名思义，它可以让你在系统崩溃了之后，还有后悔药吃，通过Time Machine瞬间回到之前的状态。Time Machine支持以下几种存储设备</p>
+<ul>
+<li>    连接到 Mac 的外置驱动器，例如 USB、雷雳或 FireWire 驱动器</li>
+<li>    连接到 AirPort Extreme 基站（802.11ac 机型）或 AirPort 时间返回舱的外置驱动器</li>
+<li>    AirPort 时间返回舱</li>
+<li>    支持通过 SMB 进行“时间机器”备份的联网储存 (NAS) 设备</li>
+<li>    共享为“时间机器”备份目标位置的 Mac</li>
+</ul>
+<p>最简单的使用办法就是，给Mac配置一个移动硬盘，这样Mac就可以通过Time Machine备份到移动硬盘，但是这种方案有个弊端，就是移动硬盘必须时刻挂载到Mac上，很不方便。<br>但是我们可以通过netatalk让闲置的机器，变成一台TimeCapsule，实现无线备份。下面我将通过Centos7系统，演示如何搭建TimeCapsule让Mac实现无线备份</p>
+<h2 id="安装-Netatalk"><a href="#安装-Netatalk" class="headerlink" title="安装 Netatalk"></a>安装 Netatalk</h2><p>Netatalk是一个免费开源的AppleTalk通信协议的实现，Linux 或者BSD系统通过它可以充当Mac的文件服务器（AppleShare File Server， 网络协议是AFP）、AppleTalk 路由、打印服务器等。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装依赖</span></span><br><span class="line">yum install wget gcc make libgcrypt-devel libdb-devel -y</span><br><span class="line"><span class="comment">#下载安装包并编译安装</span></span><br><span class="line">wget http://sourceforge.net/projects/netatalk/files/netatalk/3.1.12/netatalk-3.1.12.tar.gz</span><br><span class="line">tar -zxvf netatalk-3.1.12.tar.gz &amp;&amp; mv netatalk-3.1.12 netatalk &amp;&amp; <span class="built_in">cd</span> netatalk</span><br><span class="line">./configure --with-init-style=redhat-systemd</span><br><span class="line">make &amp;&amp; make install </span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-Netatalk"><a href="#配置-Netatalk" class="headerlink" title="配置 Netatalk"></a>配置 Netatalk</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/<span class="built_in">local</span>/etc/afp.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">;</span><br><span class="line">; Netatalk 3.x configuration file</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">[Global]</span><br><span class="line">; Global server settings</span><br><span class="line"><span class="built_in">log</span> level = default:warn</span><br><span class="line"><span class="built_in">log</span> file = /var/<span class="built_in">log</span>/afpd.log</span><br><span class="line">hosts allow = 192.168.254.0/24</span><br><span class="line">spotlight = yes</span><br><span class="line"></span><br><span class="line">; [Homes]</span><br><span class="line">; basedir regex = /home</span><br><span class="line"></span><br><span class="line">; [My AFP Volume]</span><br><span class="line">; path = /path/to/volume</span><br><span class="line"></span><br><span class="line">[Time Machine]</span><br><span class="line">path = /home/yourname/TimeMachine</span><br><span class="line">valid users = yourname</span><br><span class="line">time machine = yes</span><br><span class="line">ea = auto</span><br><span class="line">spotlight = no</span><br></pre></td></tr></table></figure>
+<p>上述配置需要修改以下几个地方：</p>
+<ul>
+<li> <code>hosts allow</code> 的IP地址为你的centos机器的IP地址</li>
+<li> <code>valid users</code> 是你们的用户名，因为不能直接使用root用户，所以我们需要新建一个普通用户，可以通过 <code>useradd yourname</code> 来创建你的用户</li>
+<li> <code>path</code>为你Mac备份的文件位置，建议放到你的用户家目录</li>
+</ul>
+<p>修改完上面的配置文件之后，我们还需要创建一个用户和备份目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建用户</span></span><br><span class="line">useradd yourname</span><br><span class="line"><span class="comment"># 修改用户密码</span></span><br><span class="line">passwd yourname</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建备份目录</span></span><br><span class="line">mkdir -p /home/yourname/TimeMachine</span><br><span class="line"><span class="comment"># 修改目录权限</span></span><br><span class="line">chown -R yourname:yourname /home/yourname/</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="安装-Avahi-用于网络发现"><a href="#安装-Avahi-用于网络发现" class="headerlink" title="安装 Avahi 用于网络发现"></a>安装 Avahi 用于网络发现</h2><p>Avahi允许程序在不需要进行手动网络配置的情况 下，在一个本地网络中发布和获知各种服务和主机。例如，当某用户把他的计算机接入到某个局域网时，如果他的机器运行有Avahi服务，则Avahi程式自动广播，从而发现网络中可用的打印机、共享文件和可相互聊天的其他用户。这有点象他正在接收局域网中的各种网络广告一样。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install avahi -y</span><br></pre></td></tr></table></figure>
+<p>然后增加配置文件 <code>vi /etc/avahi/services/afpd.service</code> 如果没有的话就新建一个</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; standalone=&#x27;no&#x27;?&gt;</span></span><br><span class="line">	<span class="meta">&lt;!DOCTYPE <span class="meta-keyword">service-group</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;avahi-service.dtd&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">service-group</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">name</span> <span class="attr">replace-wildcards</span>=<span class="string">&quot;yes&quot;</span>&gt;</span>%h<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">service</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">type</span>&gt;</span>_afpovertcp._tcp<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">port</span>&gt;</span>548<span class="tag">&lt;/<span class="name">port</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">service</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">type</span>&gt;</span>_device-info._tcp<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">port</span>&gt;</span>0<span class="tag">&lt;/<span class="name">port</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">txt-record</span>&gt;</span>model=TimeCapsule<span class="tag">&lt;/<span class="name">txt-record</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">service-group</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="设置开机自启动"><a href="#设置开机自启动" class="headerlink" title="设置开机自启动"></a>设置开机自启动</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl start avahi-daemon</span><br><span class="line">systemctl start netatalk</span><br><span class="line">systemctl <span class="built_in">enable</span> avahi-daemon</span><br><span class="line">systemctl <span class="built_in">enable</span> netatalk</span><br></pre></td></tr></table></figure>
+<h2 id="Mac端配置"><a href="#Mac端配置" class="headerlink" title="Mac端配置"></a>Mac端配置</h2><p>如果以上操作没问题的话，现在你的<code>访达&gt;网络</code>中将会看到刚刚配置好的TimeCapsule服务器<br><img src="/images/16020651816496.jpg"><br>我们双击打开这个TimeCapsule，如果提示连接失败，请<code>关闭防火墙或者开放 548 端口，否则可能无法连接到netatalk暴露的端口</code><br><img src="/images/16020655035112.jpg"><br>然后输入刚刚创建的账户和密码，就能成功连接这个TimeCapsule<br>接下来，我们打开<code>系统偏好设置</code>中的<code>时间机器</code> 选择这个磁盘，享受无线备份带来的快乐吧<br><img src="/images/16020718144051.jpg"></p>
+<h2 id="恢复文件或恢复系统"><a href="#恢复文件或恢复系统" class="headerlink" title="恢复文件或恢复系统"></a>恢复文件或恢复系统</h2><h3 id="恢复文件"><a href="#恢复文件" class="headerlink" title="恢复文件"></a>恢复文件</h3><p>点击状态栏时间机器图标，或通过启动台打开时间机器，稍等片刻便会加载出网络上的时间机器的备份内容，右键某个时间到你想恢复的文件，选择恢复即可<br><img src="/images/16020661138086.jpg"></p>
+<h2 id="恢复系统"><a href="#恢复系统" class="headerlink" title="恢复系统"></a>恢复系统</h2><p>如果你的MAC挂了，可以通过如下方式全盘恢复你的MAC到一个时间点</p>
+<p>按住「command+R」启动Mac，直到进入「Recovery」模式。<br><img src="/images/16020663746970.jpg"></p>
+<p>选择「从Time Machine 备份进行恢复」<br><img src="/images/16020663900614.jpg"></p>
+<p>选择网络上的分区，输入账号密码连接即可.</p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/Python/Python%E5%80%92%E8%AE%A1%E6%97%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E5%BA%94%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Python倒计时显示的应用
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/Python/%E5%B0%86AmazonSNS%E9%80%9A%E7%9F%A5%E8%BD%AC%E5%8F%91%E5%88%B0Telegram/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">将AmazonSNS通知转发到Telegram</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      Jacob&#39; Doc &copy; 2021
+      <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
+        ><img
+          alt="Creative Commons License"
+          style="border-width: 0"
+          src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"
+      /></a>
+      <br />
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme -
+      <a target="_blank" rel="noopener" href="https://github.com/zthxxx/hexo-theme-Wikitten">wikitten</a>
+      
+      <br />
+      <!-- <span id="busuanzi_container_site_pv"
+        ><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span
+      ></span>
+      &nbsp;|&nbsp;
+      <span id="busuanzi_container_site_pv"
+        ><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span
+      ></span> -->
+      <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i></span>
+      &nbsp;|&nbsp;
+      <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i></span>
+      
+    </div>
+  </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

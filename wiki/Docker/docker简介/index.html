@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Docker简介 | Jacob&#39; Wiki</title>
+    
+    
+        <meta name="keywords" content="Docker" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="简介之前公司的项目部署，采用的是 git+jenkins 的半自动化部署方式，代码自动化，但环境非自动化。开发环境、测试环境，以及生产环境的软件安装，以及python包的安装，必须要按照部署文档来一遍，确保两边版本一致，这样才能尽量减少由于环境不一致带来的bug。 但是对于研发人员本地机器环境，以及测试人员的测试环境，那可是一人一个环境，变量太多，动不动就会听到这样的对话：     测试：你这里又">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker简介">
+<meta property="og:url" content="https://blog.1seo.top/wiki/Docker/docker%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Jacob&#39; Wiki">
+<meta property="og:description" content="简介之前公司的项目部署，采用的是 git+jenkins 的半自动化部署方式，代码自动化，但环境非自动化。开发环境、测试环境，以及生产环境的软件安装，以及python包的安装，必须要按照部署文档来一遍，确保两边版本一致，这样才能尽量减少由于环境不一致带来的bug。 但是对于研发人员本地机器环境，以及测试人员的测试环境，那可是一人一个环境，变量太多，动不动就会听到这样的对话：     测试：你这里又">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.1seo.top/images/16010323640225.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16010323858807.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16010324131380.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16010324219407.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16010326726420.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16010327022210.jpg">
+<meta property="og:image" content="https://blog.1seo.top/images/16010327281206.jpg">
+<meta property="article:published_time" content="2020-09-25T11:09:22.000Z">
+<meta property="article:modified_time" content="2020-10-06T05:47:17.000Z">
+<meta property="article:author" content="Jacob&#39; Doc">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.1seo.top/images/16010323640225.jpg">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Jacob&#39; Wiki" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/images/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<script src="/js/hexo_resize_image.js"></script>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Jacob&#39; Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id='categories'>
+        <h3 class="widget-title">
+            <span>分类</span>
+            &nbsp;
+            <a id='allExpand' href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree" > 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file active"><a href="/wiki/Docker/docker%E7%AE%80%E4%BB%8B/">Docker简介</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Kubernetes/index/">Kubernetes中ingress配置ssl证书</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Linux/Linux-cmd/">Linux查看硬件信息</a></li>  <li class="file"><a href="/wiki/Linux/oradcl/">oradcl 创建实例技术分享</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Mac
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Mac/rbenv%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E7%AE%A1%E7%90%86/">使用 rbenv 安装和管理 Ruby 版本</a></li>  <li class="file"><a href="/wiki/Mac/%E6%90%AD%E5%BB%BAMac%E7%9A%84TimeMachine%E5%A4%87%E4%BB%BD%E6%9C%8D%E5%8A%A1%E5%99%A8/">搭建Mac的TimeMachine备份服务器</a></li>  <li class="file"><a href="/wiki/Mac/maciTerm2/">Mac终端之 iTerm2 美化</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Python/%E5%B0%86AmazonSNS%E9%80%9A%E7%9F%A5%E8%BD%AC%E5%8F%91%E5%88%B0Telegram/">将AmazonSNS通知转发到Telegram</a></li>  <li class="file"><a href="/wiki/Python/Python%E5%80%92%E8%AE%A1%E6%97%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E5%BA%94%E7%94%A8/">Python倒计时显示的应用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/hello-world/">Hello World</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Docker/docker简介" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Docker/">Docker</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Docker/" rel="tag">Docker</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/Docker/docker%E7%AE%80%E4%BB%8B/">
+            <time datetime="2020-09-25T11:09:22.000Z" itemprop="datePublished">2020-09-25</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span> 
+                            <!-- <span class="right" class="post-count">阅读时长≈9分</span>
+                            <span class="right" class="post-count">字数统计: 10k个 ｜ </span>  -->
+                        
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Docker简介
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">文章目录</strong>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E3%80%81%E5%AE%B9%E5%99%A8%E3%80%81%E4%BB%93%E5%BA%93%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.</span> <span class="toc-text">镜像、容器、仓库之间的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#namespace"><span class="toc-number">3.1.</span> <span class="toc-text">namespace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cgroup"><span class="toc-number">3.2.</span> <span class="toc-text">cgroup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AUFS"><span class="toc-number">3.3.</span> <span class="toc-text">AUFS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-docker-do-more-than-LXC"><span class="toc-number">4.</span> <span class="toc-text">What docker do more than LXC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">Docker 网络配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#host-%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.1.</span> <span class="toc-text">host 模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#container-%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.2.</span> <span class="toc-text">container 模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#none%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.3.</span> <span class="toc-text">none模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bridge%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.4.</span> <span class="toc-text">bridge模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li></ol>
+                </div>
+            
+        
+        
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>之前公司的项目部署，采用的是 <code>git+jenkins</code> 的半自动化部署方式，代码自动化，但环境非自动化。开发环境、测试环境，以及生产环境的软件安装，以及python包的安装，必须要按照部署文档来一遍，确保两边版本一致，这样才能尽量减少由于环境不一致带来的bug。</p>
+<p>但是对于研发人员本地机器环境，以及测试人员的测试环境，那可是一人一个环境，变量太多，动不动就会听到这样的对话：</p>
+<p><code>    测试：你这里又出了bug！！!</code><br><code>    开发：不可能，肯定是你机器的问题！！！</code></p>
+<p>依据设计模式的准则（哈哈，设计模式用到这里有点牵强），这里违反了<code>接口隔离原则: 你要让接口简单，只做它必须做的事，这样才易懂易重用。</code>，代码的运行环境，不应该是程序员或测试应该考虑的，他们应该做自己最主要的事情，一方面可以提高时间的利用率；另一方面，这样不会造成扯皮，从而提高了协作办公的效率。</p>
+<p>有人提出了建议，做一个虚拟机，把环境配置好，然后拷贝镜像给不同的人用不就好了。但是，VM吃资源的能力，大家都是有目共睹的。而且如果要安装或更新软件, 又得重新来一遍, 可是有的折腾了.</p>
+<p>正好最近两年Docker变得流行起来，Docker的轻量级也吸引越来越多的开发者来使用，Docker 容器相对于 VM 有以下几个优点：</p>
+<ul>
+<li>启动速度快，容器通常在一秒内可以启动，而 VM 通常要更久</li>
+<li>资源利用率高，一台普通 PC 可以跑上千个容器，你跑上千个 VM 试试</li>
+<li>性能开销小， VM 通常需要额外的 CPU 和内存来完成 OS 的功能，这一部分占据了额外的资源</li>
+</ul>
+<p>为啥相似的功能在性能上会有如此巨大的差距呢，其实这和他们的设计的理念是相关的。 VM 的设计图如下：</p>
+<p><img src="/images/16010323640225.jpg"></p>
+<p>VM 的 Hypervisor 需要实现对硬件的虚拟化，并且还要搭载自己的操作系统，自然在启动速度和资源利用率以及性能上有比较大的开销。而 Docker 的设计图是这样的： </p>
+<p><img src="/images/16010323858807.jpg"></p>
+<p>Docker 几乎就没有什么虚拟化的东西，并且直接复用了 Host 主机的 OS，在 Docker Engine 层面实现了调度和隔离重量一下子就降低了好几个档次。 Docker 的容器利用了 LXC(从 0.9 版本开始使用 libcontainer 替代 lxc)，管理利用了 namespaces 来做权限的控制和隔离，cgroups 来进行资源的配置，并且还通过 aufs 来进一步提高文件系统的资源利用率。</p>
+<p><img src="/images/16010324131380.jpg"></p>
+<h2 id="镜像、容器、仓库之间的关系"><a href="#镜像、容器、仓库之间的关系" class="headerlink" title="镜像、容器、仓库之间的关系"></a>镜像、容器、仓库之间的关系</h2><p><img src="/images/16010324219407.jpg"></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><h3 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h3><p>Docker充分利用了一项称为namespaces的技术来提供隔离的工作空间，我们称之为 container(容器)。当你运行一个容器的时候，Docker为该容器创建了一个命名空间集合。</p>
+<p>这样提供了一个隔离层，每一个应用在它们自己的命名空间中运行而且不会访问到命名空间之外。</p>
+<p>一些Docker使用到的命名空间有：</p>
+<ul>
+<li><p>pid namespace<br>不同用户的进程就是通过 pid namespace 隔离开的，且不同 namespace 中可以有相同 PID。具有以下特征:</p>
+<ol>
+<li>每个 namespace 中的 pid 是有自己的 pid=1 的进程(类似 /sbin/init 进程)</li>
+<li>每个 namespace 中的进程只能影响自己的同一个 namespace 或子 namespace 中的进程</li>
+<li>因为 /proc 包含正在运行的进程，因此在 container 中的 pseudo-filesystem 的 /proc 目录只能看到自己 namespace 中的进程</li>
+<li>因为 namespace 允许嵌套，父 namespace 可以影响子 namespace 的进程，所以子 namespace 的进程可以在父 namespace 中看到，但是具有不同的 pid</li>
+</ol>
+</li>
+<li><p>mnt namespace<br>类似 chroot，将一个进程放到一个特定的目录执行。mnt namespace 允许不同 namespace 的进程看到的文件结构不同，这样每个 namespace 中的进程所看到的文件目录就被隔离开了。同 chroot 不同，每个 namespace 中的 container 在 /proc/mounts 的信息只包含所在 namespace 的 mount point。</p>
+</li>
+<li><p>net namespace<br>网络隔离是通过 net namespace 实现的， 每个 net namespace 有独立的 network devices, IP addresses, IP routing tables, /proc/net 目录。这样每个 container 的网络就能隔离开来。 docker 默认采用 veth 的方式将 container 中的虚拟网卡同 host 上的一个 docker bridge 连接在一起。</p>
+</li>
+<li><p>uts namespace<br>UTS (“UNIX Time-sharing System”) namespace 允许每个 container 拥有独立的 hostname 和 domain name, 使其在网络上可以被视作一个独立的节点而非 Host 上的一个进程。</p>
+</li>
+<li><p>ipc namespace<br>container 中进程交互还是采用 Linux 常见的进程间交互方法 (interprocess communication - IPC), 包括常见的信号量、消息队列和共享内存。然而同 VM 不同，container 的进程间交互实际上还是 host 上具有相同 pid namespace 中的进程间交互，因此需要在IPC资源申请时加入 namespace 信息 - 每个 IPC 资源有一个唯一的 32bit ID。</p>
+</li>
+<li><p>user namespace<br>每个 container 可以有不同的 user 和 group id, 也就是说可以以 container 内部的用户在 container 内部执行程序而非 Host 上的用户。</p>
+</li>
+</ul>
+<p>有了以上 6 种 namespace 从进程、网络、IPC、文件系统、UTS 和用户角度的隔离，一个 container 就可以对外展现出一个独立计算机的能力，并且不同 container 从 OS 层面实现了隔离。 然而不同 namespace 之间资源还是相互竞争的，仍然需要类似 ulimit 来管理每个 container 所能使用的资源 - cgroup。</p>
+<h3 id="cgroup"><a href="#cgroup" class="headerlink" title="cgroup"></a>cgroup</h3><p>cgroup的功能在于将一台计算机上的资源(CPU,memory, network)进行分片，来防止进程间不利的资源抢占。</p>
+<h3 id="AUFS"><a href="#AUFS" class="headerlink" title="AUFS"></a>AUFS</h3><p>AUFS (AnotherUnionFS)  是个很有意思的东西，是 UnionFS 的一种。他的思想和 git 有些类似，可以把对文件系统的改动当成一次 commit 一层层的叠加。这样的话多个容器之间就可以共享他们的文件系统层次，每个容器下面都是共享的文件系统层次，上面再是各自对文件系统改动的层次，这样的话极大的节省了对存储的需求，并且也能加速容器的启动。</p>
+<p>想要从一个image启动一个container，docker会先加载其父image直到base image，用户的进程运行在writeable的layer中。所有parent image中的数据信息以及 ID、网络和lxc管理的资源限制等具体container的配置，构成一个docker概念上的container。如下图:</p>
+<p><img src="/images/16010326726420.jpg"></p>
+<h2 id="What-docker-do-more-than-LXC"><a href="#What-docker-do-more-than-LXC" class="headerlink" title="What docker do more than LXC"></a>What docker do more than LXC</h2><p>看似docker主要的OS级虚拟化操作是借助LXC, AUFS只是锦上添花。那么肯定会有人好奇docker到底比LXC多了些什么。无意中发现 stackoverflow 上正好有人问这个问题， 回答者是Dotcloud的创始人，出于备忘目的原文摘录如下。</p>
+<p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/17989306/what-does-docker-add-to-just-plain-lxc">http://stackoverflow.com/questions/17989306/what-does-docker-add-to-just-plain-lxc</a></p>
+<h2 id="Docker-网络配置"><a href="#Docker-网络配置" class="headerlink" title="Docker 网络配置"></a>Docker 网络配置</h2><p>参考: <a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/docker-network-and-pipework-open-source-explanation-practice">http://www.infoq.com/cn/articles/docker-network-and-pipework-open-source-explanation-practice</a></p>
+<p><img src="/images/16010327022210.jpg"></p>
+<p>docker run 创建 Docker 容器时，可以用 –net 选项指定容器的网络模式，Docker 有以下 4 种网络模式：</p>
+<ul>
+<li>host 模式，使用 –net=host 指定。</li>
+<li>container 模式，使用 –net=container:NAMEorID 指定。</li>
+<li>none 模式，使用 –net=none 指定。</li>
+<li>bridge 模式，使用 –net=bridge 指定，默认设置。</li>
+</ul>
+<h3 id="host-模式"><a href="#host-模式" class="headerlink" title="host 模式"></a>host 模式</h3><p>如果启动容器的时候使用 host 模式，那么这个容器将不会获得一个独立的 Network Namespace，而是和宿主机共用一个 Network Namespace。容器将不会虚拟出自己的网卡，配置自己的 IP 等，而是使用宿主机的 IP 和端口。</p>
+<p>例如，我们在 10.10.101.105/24 的机器上用 host 模式启动一个含有 web 应用的 Docker 容器，监听 tcp 80 端口。当我们在容器中执行任何类似 ifconfig 命令查看网络环境时，看到的都是宿主机上的信息。而外界访问容器中的应用，则直接使用 10.10.101.105:80 即可，不用任何 NAT 转换，就如直接跑在宿主机中一样。但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。</p>
+<h3 id="container-模式"><a href="#container-模式" class="headerlink" title="container 模式"></a>container 模式</h3><p>这个模式指定新创建的容器和已经存在的一个容器共享一个 Network Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的 IP，而是和一个指定的容器共享 IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过 lo 网卡设备通信。</p>
+<h3 id="none模式"><a href="#none模式" class="headerlink" title="none模式"></a>none模式</h3><p>这个模式和前两个不同。在这种模式下，Docker 容器拥有自己的 Network Namespace，但是，并不为 Docker容器进行任何网络配置。也就是说，这个 Docker 容器没有网卡、IP、路由等信息。需要我们自己为 Docker 容器添加网卡、配置 IP 等。</p>
+<h3 id="bridge模式"><a href="#bridge模式" class="headerlink" title="bridge模式"></a>bridge模式</h3><p>bridge 模式是 Docker <strong>默认</strong>的网络设置，此模式会为每一个容器分配 Network Namespace、设置 IP 等，并将一个主机上的 Docker 容器连接到一个虚拟网桥上。当 Docker server 启动时，会在主机上创建一个名为 docker0 的虚拟网桥，此主机上启动的 Docker 容器会连接到这个虚拟网桥上。</p>
+<p><img src="/images/16010327281206.jpg"></p>
+<p>虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器就通过交换机连在了一个二层网络中。接下来就要为容器分配 IP 了，Docker 会从 RFC1918 所定义的私有 IP 网段中，选择一个和宿主机不同的IP地址和子网分配给 docker0，连接到 docker0 的容器就从这个子网中选择一个未占用的 IP 使用。如一般 Docker 会使用 172.17.0.0/16 这个网段，并将 172.17.42.1/16 分配给 docker0 网桥（在主机上使用 ifconfig 命令是可以看到 docker0 的，可以认为它是网桥的管理接口，在宿主机上作为一块虚拟网卡使用）</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.open-open.com/lib/view/open1423703640748.html">http://www.open-open.com/lib/view/open1423703640748.html</a></li>
+</ul>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/Linux/Linux-cmd/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Linux查看硬件信息
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/Kubernetes/index/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Kubernetes中ingress配置ssl证书</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      Jacob&#39; Doc &copy; 2021
+      <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
+        ><img
+          alt="Creative Commons License"
+          style="border-width: 0"
+          src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"
+      /></a>
+      <br />
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme -
+      <a target="_blank" rel="noopener" href="https://github.com/zthxxx/hexo-theme-Wikitten">wikitten</a>
+      
+      <br />
+      <!-- <span id="busuanzi_container_site_pv"
+        ><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span
+      ></span>
+      &nbsp;|&nbsp;
+      <span id="busuanzi_container_site_pv"
+        ><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span
+      ></span> -->
+      <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i></span>
+      &nbsp;|&nbsp;
+      <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i></span>
+      
+    </div>
+  </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

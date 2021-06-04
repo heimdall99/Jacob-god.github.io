@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>使用 rbenv 安装和管理 Ruby 版本 | Jacob&#39; Wiki</title>
+    
+    
+        <meta name="keywords" content="Mac" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="如果你是Ruby开发者应该知道用rvm来安装&#x2F;管理Ruby版本，同时也能用它的gemset功能来管理各个工程的gems。因为rvm过于强大以至于违背了某个Linux软件开发原则。所以出现了很多轻便的替代者，其中来自37signals的rbenv就很受欢迎。 rbenv可以帮助你在一台机器上建立多个版本的ruby环境， 并提供方便的切换方法。 注意：rbenv和rvm是不兼容的，所以安装rbenv之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 rbenv 安装和管理 Ruby 版本">
+<meta property="og:url" content="https://blog.1seo.top/wiki/Mac/rbenv%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Jacob&#39; Wiki">
+<meta property="og:description" content="如果你是Ruby开发者应该知道用rvm来安装&#x2F;管理Ruby版本，同时也能用它的gemset功能来管理各个工程的gems。因为rvm过于强大以至于违背了某个Linux软件开发原则。所以出现了很多轻便的替代者，其中来自37signals的rbenv就很受欢迎。 rbenv可以帮助你在一台机器上建立多个版本的ruby环境， 并提供方便的切换方法。 注意：rbenv和rvm是不兼容的，所以安装rbenv之">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-25T17:00:34.000Z">
+<meta property="article:modified_time" content="2020-10-06T05:59:22.000Z">
+<meta property="article:author" content="Jacob&#39; Doc">
+<meta property="article:tag" content="Mac">
+<meta name="twitter:card" content="summary">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Jacob&#39; Wiki" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/images/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<script src="/js/hexo_resize_image.js"></script>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Jacob&#39; Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id='categories'>
+        <h3 class="widget-title">
+            <span>分类</span>
+            &nbsp;
+            <a id='allExpand' href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree" > 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Docker/docker%E7%AE%80%E4%BB%8B/">Docker简介</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kubernetes
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Kubernetes/index/">Kubernetes中ingress配置ssl证书</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Linux/Linux-cmd/">Linux查看硬件信息</a></li>  <li class="file"><a href="/wiki/Linux/oradcl/">oradcl 创建实例技术分享</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Mac
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file active"><a href="/wiki/Mac/rbenv%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E7%AE%A1%E7%90%86/">使用 rbenv 安装和管理 Ruby 版本</a></li>  <li class="file"><a href="/wiki/Mac/%E6%90%AD%E5%BB%BAMac%E7%9A%84TimeMachine%E5%A4%87%E4%BB%BD%E6%9C%8D%E5%8A%A1%E5%99%A8/">搭建Mac的TimeMachine备份服务器</a></li>  <li class="file"><a href="/wiki/Mac/maciTerm2/">Mac终端之 iTerm2 美化</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/wiki/Python/%E5%B0%86AmazonSNS%E9%80%9A%E7%9F%A5%E8%BD%AC%E5%8F%91%E5%88%B0Telegram/">将AmazonSNS通知转发到Telegram</a></li>  <li class="file"><a href="/wiki/Python/Python%E5%80%92%E8%AE%A1%E6%97%B6%E6%98%BE%E7%A4%BA%E7%9A%84%E5%BA%94%E7%94%A8/">Python倒计时显示的应用</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/hello-world/">Hello World</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-Mac/rbenv的安装和管理" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/Mac/">Mac</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Mac/" rel="tag">Mac</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/Mac/rbenv%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E7%AE%A1%E7%90%86/">
+            <time datetime="2020-09-25T17:00:34.000Z" itemprop="datePublished">2020-09-26</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span> 
+                            <!-- <span class="right" class="post-count">阅读时长≈6分</span>
+                            <span class="right" class="post-count">字数统计: 10k个 ｜ </span>  -->
+                        
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            使用 rbenv 安装和管理 Ruby 版本
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">文章目录</strong>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BDrvm"><span class="toc-number">1.</span> <span class="toc-text">卸载rvm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85rbenv"><span class="toc-number">2.</span> <span class="toc-text">安装rbenv</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">Linux下安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="toc-number">2.2.</span> <span class="toc-text">Mac下安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0rbenv"><span class="toc-number">3.</span> <span class="toc-text">更新rbenv</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85ruby-build"><span class="toc-number">4.</span> <span class="toc-text">安装ruby-build</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%BC%96%E8%AF%91ruby%E7%9A%84%E4%BE%9D%E8%B5%96"><span class="toc-number">4.1.</span> <span class="toc-text">安装编译ruby的依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85ruby-build-1"><span class="toc-number">4.2.</span> <span class="toc-text">安装ruby-build</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rbenv%E4%BD%BF%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">rbenv使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Ruby"><span class="toc-number">5.1.</span> <span class="toc-text">安装Ruby</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AARuby%E7%89%88%E6%9C%AC"><span class="toc-number">5.2.</span> <span class="toc-text">选择一个Ruby版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%85%A8%E5%B1%80%E7%89%88%E6%9C%AC"><span class="toc-number">5.3.</span> <span class="toc-text">设置全局版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%9C%AC%E5%9C%B0%E7%89%88%E6%9C%AC"><span class="toc-number">5.4.</span> <span class="toc-text">设置本地版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%BD%93%E5%89%8D%E7%BB%88%E7%AB%AF%E7%89%88%E6%9C%AC"><span class="toc-number">5.5.</span> <span class="toc-text">设置当前终端版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%B3%BB%E7%BB%9FRuby"><span class="toc-number">5.6.</span> <span class="toc-text">使用系统Ruby</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E7%9B%AE%E5%89%8D%E4%BD%BF%E7%94%A8%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">5.7.</span> <span class="toc-text">列出目前使用的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BAirb%E8%BF%99%E4%B8%AA%E5%91%BD%E4%BB%A4%E7%9A%84%E5%AE%8C%E6%95%B4%E8%B7%AF%E5%BE%84"><span class="toc-number">5.8.</span> <span class="toc-text">列出irb这个命令的完整路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E5%87%BA%E5%8C%85%E5%90%ABirb%E8%BF%99%E4%B8%AA%E5%91%BD%E4%BB%A4%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">5.9.</span> <span class="toc-text">列出包含irb这个命令的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AF%B9%E5%BA%94Ruby%E7%89%88%E4%B8%BB%E7%9A%84%E7%9B%AE%E5%BD%95"><span class="toc-number">5.10.</span> <span class="toc-text">查看对应Ruby版主的目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BDRuby"><span class="toc-number">5.11.</span> <span class="toc-text">卸载Ruby</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E4%BD%BF%E7%94%A8%E7%9A%84ruby%E7%89%88%E6%9C%AC"><span class="toc-number">5.12.</span> <span class="toc-text">查看当前使用的ruby版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85gem"><span class="toc-number">5.13.</span> <span class="toc-text">安装gem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85rails"><span class="toc-number">5.14.</span> <span class="toc-text">安装rails</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC"><span class="toc-number">5.15.</span> <span class="toc-text">检查安装后的软件版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%8A%E8%AF%89Rubygems%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85%E7%9A%84%E6%97%B6%E5%80%99%E4%B8%8D%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3"><span class="toc-number">5.16.</span> <span class="toc-text">告诉Rubygems安装软件包的时候不安装文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84rbenv%E6%8F%92%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">一些好用的rbenv插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4"><span class="toc-number">7.</span> <span class="toc-text">故障排除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">8.</span> <span class="toc-text">参考文档</span></a></li></ol>
+                </div>
+            
+        
+        
+            <p>如果你是Ruby开发者应该知道用rvm来安装/管理Ruby版本，同时也能用它的gemset功能来管理各个工程的gems。因为rvm过于强大以至于违背了某个Linux软件开发原则。所以出现了很多轻便的替代者，其中来自37signals的rbenv就很受欢迎。</p>
+<p>rbenv可以帮助你在一台机器上建立多个版本的ruby环境， 并提供方便的切换方法。</p>
+<p><code>注意：rbenv和rvm是不兼容的，所以安装rbenv之前要先把rvm卸载。</code></p>
+<h2 id="卸载rvm"><a href="#卸载rvm" class="headerlink" title="卸载rvm"></a>卸载rvm</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rvm implode</span><br></pre></td></tr></table></figure>
+<p>然后再将你zsh或bash中的这一句去掉。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[ -s <span class="string">&quot;<span class="variable">$HOME</span>/.rvm/scripts/rvm&quot;</span> ]] &amp;&amp; . <span class="string">&quot;<span class="variable">$HOME</span>/.rvm/scripts/rvm&quot;</span> <span class="comment"># Load RVM function</span></span><br></pre></td></tr></table></figure>
+<h2 id="安装rbenv"><a href="#安装rbenv" class="headerlink" title="安装rbenv"></a>安装rbenv</h2><h3 id="Linux下安装"><a href="#Linux下安装" class="headerlink" title="Linux下安装"></a>Linux下安装</h3><p>rbenv的源代码托管在github，在终端中从 github上将rbenv源码clone到本地，然后设置$PATH。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/rbenv/rbenv.git ~/.rbenv</span><br><span class="line">Optionally, try to compile dynamic bash extension to speed up rbenv. Don<span class="string">&#x27;t worry if it fails; rbenv will still work normally:</span></span><br><span class="line"><span class="string">cd ~/.rbenv &amp;&amp; src/configure &amp;&amp; make -C src</span></span><br><span class="line"><span class="string">echo &#x27;</span><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$HOME</span>/.rbenv/bin:<span class="variable">$PATH</span>&quot;</span><span class="string">&#x27; &gt;&gt; ~/.bashrc</span></span><br><span class="line"><span class="string">echo &#x27;</span><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(rbenv init -)</span>&quot;</span><span class="string">&#x27; &gt;&gt; ~/.bashrc</span></span><br></pre></td></tr></table></figure>
+<p><code>注意:如果用Zsh，就用~/.zshrc替换~/.bash_profile。</code></p>
+<p>重启shell或者运行exec $SHELL，就可以开始用rbenv了。</p>
+<p>测试rbenv是否设置正常</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">type</span> rbenv</span><br><span class="line"><span class="comment">#=&gt; &quot;rbenv is a function&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Mac下安装"><a href="#Mac下安装" class="headerlink" title="Mac下安装"></a>Mac下安装</h3><p>如果你有安装Homebrew的话，可以用以下命令来安装rbenv和 ruby-build</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew install rbenv</span><br><span class="line">$ brew install ruby-build</span><br></pre></td></tr></table></figure>
+<p>配置并初始化SHELL</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;eval &quot;$(rbenv init -)&quot;&#x27;</span> &gt;&gt; ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p><code>注意:如果用 Zsh，就用~/.zshrc替换~/.bash_profile。</code></p>
+<h2 id="更新rbenv"><a href="#更新rbenv" class="headerlink" title="更新rbenv"></a>更新rbenv</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.rbenv</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+<h2 id="安装ruby-build"><a href="#安装ruby-build" class="headerlink" title="安装ruby-build"></a>安装ruby-build</h2><p>使用ruby-build可以自动下载编译安装Ruby相应的版本，只需指定版本号。</p>
+<p>ruby-build是一个rbenv插件，用来编译安装Ruby源码。提供了一个<code>rbenv install</code>命令编译和安装类UNIX系统不同版本的Ruby。如果选择手动编译，可不使用这个工具。</p>
+<h3 id="安装编译ruby的依赖"><a href="#安装编译ruby的依赖" class="headerlink" title="安装编译ruby的依赖"></a>安装编译ruby的依赖</h3><p>Ubuntu</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6 libreadline6-dev zlib1g zlib1g-dev</span><br></pre></td></tr></table></figure>
+<p>CentOS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y gcc openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel</span><br></pre></td></tr></table></figure>
+<h3 id="安装ruby-build-1"><a href="#安装ruby-build-1" class="headerlink" title="安装ruby-build"></a>安装ruby-build</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build</span><br><span class="line"><span class="built_in">cd</span> ~/.rbenv/plugins/ruby-build</span><br><span class="line">./install.sh</span><br></pre></td></tr></table></figure>
+<h2 id="rbenv使用"><a href="#rbenv使用" class="headerlink" title="rbenv使用"></a>rbenv使用</h2><h3 id="安装Ruby"><a href="#安装Ruby" class="headerlink" title="安装Ruby"></a>安装Ruby</h3><p>查看可用的ruby版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv install --list</span><br></pre></td></tr></table></figure>
+<p>安装2.3.0版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv install 2.3.0</span><br></pre></td></tr></table></figure>
+<p>等待一会儿，安装完毕后可以查看已经安装的所有Ruby版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rbenv versions</span><br><span class="line">* system (<span class="built_in">set</span> by /root/.rbenv/version)</span><br><span class="line">  2.3.0</span><br></pre></td></tr></table></figure>
+<p>显示所有版本，前面加*的为当前激活的版本。</p>
+<h3 id="选择一个Ruby版本"><a href="#选择一个Ruby版本" class="headerlink" title="选择一个Ruby版本"></a>选择一个Ruby版本</h3><p>rbenv中的Ruby版本有三个不同的作用域：<code>全局(global)</code>，<code>本地(local)</code>，<code>当前终端(shell)</code>。</p>
+<p>查找版本的优先级是当前终端&gt;本地&gt;全局。</p>
+<h3 id="设置全局版本"><a href="#设置全局版本" class="headerlink" title="设置全局版本"></a>设置全局版本</h3><p>全局版本是在没有找到当前终端或本地作用域的设置时执行。通过以下命令设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv global 2.3.0</span><br></pre></td></tr></table></figure>
+<h3 id="设置本地版本"><a href="#设置本地版本" class="headerlink" title="设置本地版本"></a>设置本地版本</h3><p>本地作用域是针对各个项目的，通过项目文件夹中的 <code>.rbenv-version</code> 这个文件进行管理，需要将相应的 Ruby 版本号写入这个文件。所以一般设置这个选项就可以了，这个过程可以通过以下命令执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv <span class="built_in">local</span> 2.3.0</span><br></pre></td></tr></table></figure>
+<p>会在当前目录下生成<code>.rbenv-version</code>文件，此文件会覆盖<code>rbenv global</code>设定。</p>
+<p>如果想取消的话，可以这样</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv <span class="built_in">local</span> --<span class="built_in">unset</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置当前终端版本"><a href="#设置当前终端版本" class="headerlink" title="设置当前终端版本"></a>设置当前终端版本</h3><p>“<code>当前终端</code>“作用域的优先级最高。通过以下命令设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv shell 2.3.0</span><br></pre></td></tr></table></figure>
+<h3 id="使用系统Ruby"><a href="#使用系统Ruby" class="headerlink" title="使用系统Ruby"></a>使用系统Ruby</h3><p>如果要使用系统原有的Ruby，则通过system指定</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv global system</span><br></pre></td></tr></table></figure>
+<p>每当切换ruby版本和执行bundle install之后必须执行这个命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv <span class="built_in">rehash</span></span><br></pre></td></tr></table></figure>
+<p>设置完毕后可以通过以下命令进行验证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> ruby  </span><br><span class="line"><span class="comment"># ~/.rbenv/shims/ruby</span></span><br></pre></td></tr></table></figure>
+<h3 id="列出目前使用的版本"><a href="#列出目前使用的版本" class="headerlink" title="列出目前使用的版本"></a>列出目前使用的版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rbenv version</span><br><span class="line"><span class="comment">#2.3.0 (set by RBENV_VERSION environment variable)</span></span><br></pre></td></tr></table></figure>
+<h3 id="列出irb这个命令的完整路径"><a href="#列出irb这个命令的完整路径" class="headerlink" title="列出irb这个命令的完整路径"></a>列出irb这个命令的完整路径</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv <span class="built_in">which</span> irb</span><br></pre></td></tr></table></figure>
+<h3 id="列出包含irb这个命令的版本"><a href="#列出包含irb这个命令的版本" class="headerlink" title="列出包含irb这个命令的版本"></a>列出包含irb这个命令的版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv <span class="built_in">whence</span> irb</span><br></pre></td></tr></table></figure>
+<h3 id="查看对应Ruby版主的目录"><a href="#查看对应Ruby版主的目录" class="headerlink" title="查看对应Ruby版主的目录"></a>查看对应Ruby版主的目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv prefix</span><br></pre></td></tr></table></figure>
+<h3 id="卸载Ruby"><a href="#卸载Ruby" class="headerlink" title="卸载Ruby"></a>卸载Ruby</h3><p>直接用用<code>rm -rf </code>命令删除<code>~/.rbenv/versions</code>文件夹下对应的Ruby版本即可</p>
+<p>如果安装了 ruby-build 插件，那么使用如下命令即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv uninstall 2.3.0</span><br></pre></td></tr></table></figure>
+<h3 id="查看当前使用的ruby版本"><a href="#查看当前使用的ruby版本" class="headerlink" title="查看当前使用的ruby版本"></a>查看当前使用的ruby版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv version</span><br></pre></td></tr></table></figure>
+<h3 id="安装gem"><a href="#安装gem" class="headerlink" title="安装gem"></a>安装gem</h3><p>使用rbenv后，gem还是按照原有的方式进行安装、升级，只是gem的安装路径是在~/.rbenv 文件夹中当前Ruby版本文件夹下。而且安装带有可执行文件的gem后，需要执行一个特别的命令，告诉rbenv更新相应的映射关系，这个命令在安装新版本的Ruby后也需要执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbenv <span class="built_in">rehash</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装rails"><a href="#安装rails" class="headerlink" title="安装rails"></a>安装rails</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install bundler rails</span><br></pre></td></tr></table></figure>
+<h3 id="检查安装后的软件版本"><a href="#检查安装后的软件版本" class="headerlink" title="检查安装后的软件版本"></a>检查安装后的软件版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -v gem -v rake -V rails -v</span><br></pre></td></tr></table></figure>
+<h3 id="告诉Rubygems安装软件包的时候不安装文档"><a href="#告诉Rubygems安装软件包的时候不安装文档" class="headerlink" title="告诉Rubygems安装软件包的时候不安装文档"></a>告诉Rubygems安装软件包的时候不安装文档</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;gem: --no-ri --no-rdoc&quot;</span> &gt; ~/.gemrc</span><br></pre></td></tr></table></figure>
+<h2 id="一些好用的rbenv插件"><a href="#一些好用的rbenv插件" class="headerlink" title="一些好用的rbenv插件"></a>一些好用的rbenv插件</h2><p>ruby-build<br>自动编译安装ruby</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build</span><br></pre></td></tr></table></figure>
+<p>gemset<br>管理gemset</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/jf/rbenv-gemset.git  ~/.rbenv/plugins/rbenv-gemset</span><br></pre></td></tr></table></figure>
+<p>rbenv-gem-rehash<br>通过gem命令安装完gem后无需手动输入rbenv rehash命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/rbenv/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash</span><br></pre></td></tr></table></figure>
+<p>rbenv-update<br>通过rbenv update命令来更新rbenv以及所有插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/rkh/rbenv-update ~/.rbenv/plugins/rbenv-update</span><br></pre></td></tr></table></figure>
+<p>rbenv-aliases</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/tpope/rbenv-aliases.git ~/.rbenv/plugins/rbenv-aliases</span><br></pre></td></tr></table></figure>
+<h2 id="故障排除"><a href="#故障排除" class="headerlink" title="故障排除"></a>故障排除</h2><p>rbenv安装太慢的解决办法</p>
+<p>rbenv+ruby-build插件，可以直接使用命令<code>rbenv install 2.3.0</code>安装对应的ruby版本。但这样太慢，很长时间都在下载。</p>
+<p>解决方法</p>
+<p>使用国内镜像源<br>因为检查md5sum，所以需要在url后面加个#或者?</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$env</span> RUBY_BUILD_MIRROR_URL=https://ruby.taobao.org/mirrors/ruby/ruby-2.3.0.tar.gz<span class="comment"># rbenv install 2.3.0</span></span><br></pre></td></tr></table></figure>
+<p>使用wget下载<br>如果速度还慢，可以用wget先下载完成</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ wget -q https://ruby.taobao.org/mirrors/ruby/ruby-2.3.0.tar.gz -O ~/.rbenv/versions/ruby-2.3.0.tar.gz</span><br><span class="line">$ env RUBY_BUILD_MIRROR_URL=file:///root/.rbenv/versions/ruby-2.3.0.tar.gz<span class="comment"># rbenv install 2.3.0</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://about.ac/2012/04/install-ruby-with-rbenv.html">https://about.ac/2012/04/install-ruby-with-rbenv.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.dreamxu.com/install-ruby-on-mac-with-rbenv/">https://www.dreamxu.com/install-ruby-on-mac-with-rbenv/</a></li>
+</ul>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/Python/%E5%B0%86AmazonSNS%E9%80%9A%E7%9F%A5%E8%BD%AC%E5%8F%91%E5%88%B0Telegram/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    将AmazonSNS通知转发到Telegram
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Hello World</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      Jacob&#39; Doc &copy; 2021
+      <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"
+        ><img
+          alt="Creative Commons License"
+          style="border-width: 0"
+          src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"
+      /></a>
+      <br />
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme -
+      <a target="_blank" rel="noopener" href="https://github.com/zthxxx/hexo-theme-Wikitten">wikitten</a>
+      
+      <br />
+      <!-- <span id="busuanzi_container_site_pv"
+        ><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span
+      ></span>
+      &nbsp;|&nbsp;
+      <span id="busuanzi_container_site_pv"
+        ><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span
+      ></span> -->
+      <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i></span>
+      &nbsp;|&nbsp;
+      <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i></span>
+      
+    </div>
+  </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
